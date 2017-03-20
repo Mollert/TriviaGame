@@ -1,1 +1,1 @@
-First commit after I set up the folders - here goes!
+Set-up now make it work.  Spent to much time on html and css.  JavaScript and jQuery lacking.
