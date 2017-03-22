@@ -3,7 +3,7 @@ var arkansas = ["Arkansas", "assets/images/Arkansas.png",
  "This state became the 25th state in the union on June 15th, 1836.",
  "This state houses the largest producer of dulcimers in the world.",
  "The honeybee is the state insect in which state?"];
-var flordia = ["Flordia", "assets/images/Flordia.png",
+var florida = ["Florida", "assets/images/Florida.png",
  "In what state is the city with the highest rate per capita of lightning strikes?",
  "The first Snapper riding lawn mower was developed in this state.",
  "A city in this state is known as the Venice of America."];
@@ -47,18 +47,22 @@ var wisconsin = ["Wisconsin", "assets/images/Wisconsin.png",
  "The first hydroelectric dam was built in this state.",
  "A city in this state is home to the Harley Davidson Motorcycle Company.",
  "Ringling Brothers Circus was first staged in this state."];
-var states = [arkansas, flordia, louisiana, michigan, minnesota,
+var states = [arkansas, florida, louisiana, michigan, minnesota,
 	 missouri, newyork, ohio, southcarolina, texas, westvirginia, wisconsin];
+var user = 0;
 var randomState = [];
 var randomNumber = 0;
 var randomQuestion =[];
-var right = 0;
-var wrong = 0;
+var answer = 0;
+var correct = 0;
+var total = 0;
 var percentage = 0;
+var count = 0;
+var intervalId;
 // Getting random number from 0-11 for states-fuction because it is used frequently
 function getRandomTwelve() {
 	randomNumber = (Math.floor(Math.random() * 12));
-	return randomNumber;
+  return randomNumber;
 }
 // Get five different random numbers - used for the states
 function getFive() {
@@ -108,16 +112,116 @@ function getAndPlaceStates() {
 function getQuestion() {
 	$(".first-question").text(states[randomState[0]][randomQuestion[0]]);
 	$(".second-question").text(states[randomState[1]][randomQuestion[1]]);
-	$(".third-question").html(states[randomState[2]][randomQuestion[2]]);
-	$(".fourth-question").html(states[randomState[3]][randomQuestion[3]]);
+	$(".third-question").text(states[randomState[2]][randomQuestion[2]]);
+	$(".fourth-question").text(states[randomState[3]][randomQuestion[3]]);
+}
+// use random number to get the four answers to the questions
+function getAnswer() {
+	$(".first-answer").text("Answer: " + states[randomState[0]][0]);
+	$(".second-answer").text("Answer: " + states[randomState[1]][0]);
+	$(".third-answer").text("Answer: " + states[randomState[2]][0]);
+	$(".fourth-answer").text("Answer: " + states[randomState[3]][0]);
+}
+// Hide questions and answers in html
+function hideQuestionAndAnswer() {
+  $(".first-answer").hide();
+  $(".second-question, .second-answer").hide();
+  $(".third-question, .third-answer").hide();
+  $(".fourth-question, .fourth-answer").hide();
+}
+// Start the question reply timmer
+function figurePercentage() {
+  percentage = (correct/total) * 100;
+  percentage = Math.round(percentage);
+  $(".percentage").text(percentage);
+}
+// Countdown timer for picking answer
+function timer() {
+  count = 10;
+  $(".time").text(count);
+  intervalId = setInterval(decrement, 1000);
+}
+function decrement() {
+  count--;
+  if (count <= 0) {
+    clearInterval(intervalId);
+  }
+  $(".time").text(count);
 }
 // Reset new states and questions
-	$(".button").on("click", function() {
-		getFive();
-		getAndPlaceStates();
-		getFour();
-		getQuestion();
-
-		
-		console.log(states[randomState[0]][randomQuestion[0]]);
-	});
+$(".try-button").on("click", function() {
+	getFive();
+	getAndPlaceStates();
+	getFour();
+	getQuestion();
+  getAnswer();
+  hideQuestionAndAnswer();
+  timer();
+  answer = states[randomState[0]][0];
+  setTimeout(function() {
+    $(".first-answer, .second-question").show();
+    answer = states[randomState[1]][0];
+    clearInterval(intervalId);
+    timer();
+  }, 10000);
+  setTimeout(function() {
+    $(".second-answer, .third-question").show();
+    answer = states[randomState[2]][0];
+    clearInterval(intervalId);
+    timer();
+  }, 20000);
+  setTimeout(function() {
+    $(".third-answer, .fourth-question").show();
+    answer = states[randomState[3]][0];
+    clearInterval(intervalId);
+    timer();
+  }, 30000);
+  setTimeout(function() {
+    $(".fourth-answer").show();
+  }, 40000);
+});
+// Looking for clicks on first state and counting if correct or not
+$("#first-image").on("click", function() {
+  total++;
+  if (answer === states[randomState[0]][0]) {
+    $(".first-answer").show();
+    correct++;
+  }
+  figurePercentage();
+});
+// Looking for clicks on second state and counting if correct or not
+$("#second-image").on("click", function() {
+  total++;
+  if (answer === states[randomState[1]][0]) {
+    $(".second-answer").show();
+    correct++;
+  }
+  figurePercentage();
+});
+// Looking for clicks on third state and counting if correct or not
+$("#third-image").on("click", function() {
+  total++;
+  if (answer === states[randomState[2]][0]) {
+    $(".third-answer").show();
+    correct++;
+  }
+  figurePercentage();
+});
+// Looking for clicks on fourth state and counting if correct or not
+$("#fourth-image").on("click", function() {
+  total++;
+  if (answer === states[randomState[3]][0]) {
+    $(".fourth-answer").show();
+    correct++;
+  }
+  figurePercentage();
+});
+// Looking for clicks on fifith state and counting if correct or not
+$("#fifth-image").on("click", function() {
+  total++;
+  if (answer === states[randomState[4]][0]) {
+    $(".fifth-answer").show();
+    correct++;
+  }
+  figurePercentage();
+});
